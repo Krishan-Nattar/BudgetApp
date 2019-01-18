@@ -1,26 +1,93 @@
 //Budget Controller
 var budgetController = (function(){
 	
+	//Each item has a description and value
 
-	//code
+	var Expense = function(id, description, value){
+		this.id = id;
+		this.description = description;
+		this.value = value;
+	};
+
+	var Income = function(id, description, value){
+		this.id = id;
+		this.description = description;
+		this.value = value;
+	};
+
+	
+
+	var data = {
+		allItems: {
+			exp: [],
+			inc: [],
+		},
+		totals: {
+			exp: 0,
+			inc: 0
+		}
+	
+
+	};
+
+	return {
+		addItem: function(type, des, val){
+			newItem;
+
+			newItem = new Expense(ID, des, val);
+
+		}
+	}
 
 })();
 
 
 //UI Controller
 var UIController = (function() {
+	var DOMstrings = {
+		inputType: '.add__type',
+		inputDescription: '.add__description',
+		inputValue: '.add__value',
+		addButton: '.add__btn'
+	};
 
-//code
+	return {
+		getInput: function(){
+			return { 
+				type: document.querySelector(DOMstrings.inputType).value, //returns income or expense
+				description: document.querySelector(DOMstrings.inputDescription).value,
+				value: document.querySelector(DOMstrings.inputValue).value
+			};
+		},
+		getDOMstrings: function(){
+			return DOMstrings;
+		}
+	}
 
 })();
 
 
 // Global App Controller
+//The controller is the place where we tell the other modules what to do
 var controller = (function(budgetCtrl, UICtrl) {
 
+	var setupEventListeners = function() {
+		var DOMstrings = UIController.getDOMstrings();
+		document.querySelector(DOMstrings.addButton).addEventListener('click', ctrlAddItem);
+		document.addEventListener('keypress', function(event) {
+			if (event.keyCode == 13 || event.which == 13) {
+				ctrlAddItem();
+			}
+		});
+
+	};
+
 	var ctrlAddItem = function() {
-console.log('called');
+
 		// 1. Get field input data
+		var input = UICtrl.getInput();
+		
+		// console.log(input);
 
 		// 2. Add item to budget controller
 
@@ -29,24 +96,16 @@ console.log('called');
 		// 4. Calculate the budget
 
 		// 5. Display the budget
-	}
+	};
 
-	document.querySelector('.add__btn').addEventListener('click', ctrlAddItem);
+	return {
+		init: function(){
+			setupEventListeners();
+			console.log('application has started');
 
-	document.addEventListener('keypress', function(event) {
-
-		
-		if (event.keyCode == 13 || event.which == 13) {
-			ctrlAddItem();
 		}
-
-
-	});
+	}
 
 })(budgetController, UIController);
 
-
-
-
-
-
+controller.init();
